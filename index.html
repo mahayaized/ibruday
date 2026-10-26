@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>for ibru ♡</title>
+<style>
+:root { color-scheme: dark; --orange: #ff5500; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; background: #080808; color: var(--orange);
+  font-family: "Courier New", Courier, monospace; display: flex;
+  justify-content: center; align-items: center; padding: 22px;
+}
+.terminal {
+  width: min(760px, 100%); min-height: 440px; border: 1px solid #6e2609;
+  background: #050505; padding: clamp(18px, 4vw, 32px);
+  box-shadow: 0 0 28px #ff550018, inset 0 0 30px #ff550008;
+}
+.top { color: #a83b0b; font-size: 12px; margin-bottom: 28px; }
+h1 { font-size: clamp(22px, 5vw, 30px); font-weight: normal; margin: 0 0 12px; text-shadow: 0 0 9px #ff550066; }
+p { line-height: 1.65; }
+.sub { color: #d14a0c; }
+.output { min-height: 94px; margin-top: 24px; line-height: 1.7; overflow-wrap: anywhere; }
+.reason { color: #ff7a36; text-shadow: 0 0 7px #ff550033; }
+.promptrow { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+.prompt { white-space: nowrap; }
+input {
+  min-width: 0; flex: 1; background: transparent; color: var(--orange);
+  border: 0; border-bottom: 1px solid #9d390b; outline: none; padding: 10px 2px;
+  font: inherit; font-size: 16px; border-radius: 0;
+}
+input:focus { border-bottom-color: var(--orange); box-shadow: 0 1px 0 #ff550044; }
+button {
+  background: transparent; color: var(--orange); border: 1px solid #9d390b;
+  padding: 9px 13px; font: inherit; cursor: pointer;
+}
+button:hover, button:focus { background: #ff550015; border-color: var(--orange); }
+.footer { color: #7f300e; font-size: 12px; margin-top: 26px; }
+::selection { background: var(--orange); color: #080808; }
+@media (max-width: 480px) {
+  body { padding: 12px; align-items: flex-start; padding-top: 7vh; }
+  .terminal { min-height: 0; padding: 18px; }
+  .promptrow { align-items: stretch; flex-wrap: wrap; }
+  .prompt { padding-top: 10px; }
+  button { width: 100%; }
+}
+</style>
+</head>
+<body>
+<main class="terminal">
+  <div class="top"></div>
+  <h1>hi my silly</h1>
+  <p class="sub">100 reasons why i love you for ur 100th bday.</p>
+  <p>type a number from <strong>1–100</strong> and press enter.</p>
+  <div class="output" id="output" aria-live="polite">waiting for your input...</div>
+  <form id="reason-form" class="promptrow" autocomplete="off">
+    <label class="prompt" for="number">type here silly!!</label>
+    <input id="number" name="number" inputmode="numeric" aria-label="Reason number" placeholder="enter a number..." autofocus>
+    <button type="submit">reveal</button>
+  </form>
+  <div class="footer">100 little reasons. one very silly person.</div>
+</main>
+<script>
+const reasons = [
+  "the way you make me like things about myself i wasnt even aware existed",
+  "how you give me a reason to wake up in the morning",
+  "how my baseline emotion is happy cuz ik i have you",
+  "the little noise you make after you laugh",
+  "the way u instantly look worried if i pout a little bit on videocall",
+  "how soft ur skin is",
+  "how u always stay in physical contact w me when we meet",
+  "the way your lips feel against mine",
+  "how youre so attractive it makes every other face irrelevant",
+  "the way youre willing to put in more effort in this rs than anything else",
+  "how we have our own little language that only makes sense to us",
+  "how passionate you are about the things you love",
+  "how you sound so excited when youre telling me a fun fact",
+  "how happy u get when i mention i did or watched something u like",
+  "how ur hands seem to perfectly fit in mine",
+  "how ure so tall when i hug u it feels like im encapsulated in ur warmth",
+  "how your voice softens when you talk to me",
+  "my hands r always cold and urs r always warm",
+  "how u send me stuff knowing itll make me happy even if its not smth u watch a lot",
+  "how ure always willing to let me talk about what i love",
+  "how one of ur eyes drifts when ure zoned out",
+  "how beautiful and smooth and warm ur singing voice is",
+  "ur big dick .",
+  "how you make me feel like no matter what things will work out",
+  "how we can sit and not say anything, just look at each other and itll still show how much we love each other",
+  "how u always smell so good even when i smelled ur armpits .",
+  "how u want to always see me happy . ie when u start attacking the other tower in clash so u see me excited after a win",
+  "how ur eyes soften when u look at me",
+  "how u hold my face when we kiss",
+  "the distinct shape of ur nose which i love to boop when we meet.",
+  "how your hair feels when i run my hands through it",
+  "ur hair as a whole . how cute and fluffy it is",
+  "the way u laugh so much sometimes u cant even talk",
+  "how ur eyes crinkle when you smile",
+  "the noises you make when ure rlly sleepy",
+  "how when ure rlly tired u start sounding so silly and nonsensical",
+  "how u randomly get such large bouts of love for me and u tell me",
+  "the random catchphrases u come up with  ure shakespeare reincarnated",
+  "how we make up the best songs together.",
+  "the silly faces u make like crescent to make me laugh",
+  "the way you hype up my smallest accomplishments",
+  "how u look when ure holding back a smile after i make the silliest stupidest joke i ever know .",
+  "how even if we arent talking just spending time together feels like home",
+  "how i cant imagine a future without you",
+  "how u always tell me about stuff like games i always wanna know more abt ur world",
+  "how every single bit of you is so emblematic of autumn",
+  "how i know you love orange so much every time i see even a fleck of orange i think of you",
+  "how you make me feel like i can truly and wholly be myself around you",
+  "im so excited to talk to you that every time i get a notification im hoping its you",
+  "how i ask you every question in the world and u somehow know the answer",
+  "ur silly search history .",
+  "how u make me just fully confident that u wont leave me when it gets hard",
+  "the way youre confident and sure in urself in a way i strive to be like",
+  "youre so authentic to yourself, you never pretend to be someone you arent",
+  "how a 5 minute call turns into 4 hours",
+  "how it feels like our relationship is a special corner for just us",
+  "how when ure eating the best sauce always goes on the side of ur mouth like a silly",
+  "how every time i hear a song about love i think about us",
+  "how u go from saying the silliest legend to being completely serious when i tell u i feel bad",
+  "how grateful you make me for how out of every person in the world, i’ve found mine",
+  "how my heart feels so warm when u say i love you to me",
+  "how youre also my best friend",
+  "how youre the first person i want to share good news with",
+  "how every time something happens i think what would my ibru feel about it",
+  "how you make me feel like the most precious person in the world",
+  "how you are the first thought when i wake up and the last thought before i fall asleep",
+  "how you make me believe in soulmates",
+  "after so long, you made me believe in love again",
+  "you make me feel a sense of fulfilment i never knew before i met you",
+  "the way i can hear u type on ur pc so excitedly when ur silly curious brain thinks of smth to google",
+  "the way you look when youre concentrating really hard",
+  "the way you get distracted halfway through telling me something",
+  "how u make sure to make some time for me even when ure busy",
+  "how you try so hard to understand my world even if it doesnt make sense to you",
+  "how i can gossip with u my drama queen .",
+  "how you make me feel understood when i know im being difficult to understand",
+  "how both of us understand the most obscure references the other person is doing",
+  "how being around you makes me forget i have to check the time",
+  "how loving you has taught me how love is actually supposed to be like",
+  "how we can disagree on things but not forget how much we love each other",
+  "how being close to you makes the rest of my world feel unimportant",
+  "how you get so excited to tell me stuff",
+  "how i want to know every version of you that life brings",
+  "how im grateful for you you have been, who you are and who you will become",
+  "how i want to grow old with you",
+  "how i want to keep discovering new sides of you and hearing new stories i never knew about",
+  "how you get so happy when you introduce me to something and i tell you i like it",
+  "how you care so much about me hurting me in any way also hurts you so much",
+  "how when u pause a show we’re watching we end up saying the exact same thing at the same time",
+  "how you get so overwhelmed with love for me even when i do the simplest stuff",
+  "how i can go from crying to perfectly happy in five minutes just by hearing your voice",
+  "how i know that if i have no one else, i know i have you",
+  "the way i still have the biggest crush on u even tho we’ve basically been together for 9 months",
+  "the way you hug me whenever we meet like im the only thing in the entire world that matters to you",
+  "how you never make me feel like you dont trust me",
+  "how i know that even if we’re having a bad day, it’ll be okay because its going to be us in the end. Inshallah.",
+  "because out of all the lives i could have lived, i’m glad our paths crossed.",
+  "i love you because you are love.",
+  "i love you because you are the purest form of happiness i know.",
+  "i love you because even after writing 100 reasons, i feel like i’ve barely scratched the surface."
+];
+const form = document.getElementById('reason-form');
+const input = document.getElementById('number');
+const output = document.getElementById('output');
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const raw = input.value.trim();
+  if (!/^\d+$/.test(raw) || Number(raw) < 1 || Number(raw) > 100) {
+    output.textContent = 'please enter a number between 1 and 100.';
+    output.className = 'output';
+    return;
+  }
+  const n = Number(raw);
+  output.className = 'output reason';
+  output.textContent = `${n}. ${reasons[n - 1]}`;
+});
+</script>
+</body>
+</html>
